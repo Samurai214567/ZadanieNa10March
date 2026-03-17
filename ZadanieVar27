@@ -1,0 +1,124 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Membership {
+private:
+    string fullName;   // ФИО клиента
+    string type;       // тип абонемента (месяц / год и т.д.)
+    double price;      // цена абонемента
+    int visitsLeft;    // оставшиеся посещения
+
+public:
+    // Конструктор по умолчанию
+    Membership() {
+        fullName = "Не указано";
+        type = "месяц";
+        price = 0;
+        visitsLeft = 0;
+    }
+
+    // Конструктор с параметрами
+    Membership(string name, string t, double p, int visits) {
+        fullName = name;
+        type = t;
+        setPrice(p);      // используем сеттер для проверки
+        setVisits(visits);
+    }
+
+    // Деструктор (вывод для демонстрации)
+    ~Membership() {
+        cout << "Удаление абонемента: " << fullName << endl;
+    }
+
+    // Геттеры (получение значений)
+    string getName() {
+        return fullName;
+    }
+
+    string getType() {
+        return type;
+    }
+
+    double getPrice() {
+        return price;
+    }
+
+    int getVisits() {
+        return visitsLeft;
+    }
+
+    // Сеттер цены с проверкой
+    bool setPrice(double p) {
+        if (p >= 0) {
+            price = p;
+            return true;
+        }
+        cout << "Ошибка: цена < 0" << endl;
+        return false;
+    }
+
+    // Сеттер посещений с проверкой
+    bool setVisits(int v) {
+        if (v >= 0) {
+            visitsLeft = v;
+            return true;
+        }
+        cout << "Ошибка: посещения < 0" << endl;
+        return false;
+    }
+
+    // Использовать одно посещение
+    void useVisit() {
+        if (visitsLeft > 0) {
+            visitsLeft--;
+            cout << "Посещение использовано. Осталось: " << visitsLeft << endl;
+        }
+        else {
+            cout << "Нет посещений" << endl;
+        }
+    }
+
+    // Продлить абонемент (добавить посещения)
+    void extendVisits(int amount) {
+        if (amount > 0) {
+            visitsLeft += amount;
+            cout << "Добавлено посещений: " << amount << endl;
+        }
+        else {
+            cout << "Ошибка: неверное значение" << endl;
+        }
+    }
+
+    // Вывод всей информации
+    void printInfo() {
+        cout << "\n--- Абонемент ---" << endl;
+        cout << "ФИО: " << fullName << endl;
+        cout << "Тип: " << type << endl;
+        cout << "Цена: " << price << endl;
+        cout << "Посещения: " << visitsLeft << endl;
+    }
+};
+
+int main() {
+    setlocale(0, "");
+
+    // объект с дефолтными значениями
+    Membership m1;
+    m1.printInfo();
+
+    // объект с данными
+    Membership m2("Иванов Иван", "год", 12000, 10);
+    m2.printInfo();
+
+    // использование методов
+    m2.useVisit();       // списание посещения
+    m2.extendVisits(5);  // добавление посещений
+    m2.printInfo();
+
+    // проверка ошибок
+    m2.setPrice(-100);   // ошибка
+    m2.setVisits(-5);    // ошибка
+
+    return 0;
+}
